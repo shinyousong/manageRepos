@@ -1,2 +1,3 @@
-# manageRepos
-repos I manage
+### manageRepos
+### Algorithm
+### A to Z implement
