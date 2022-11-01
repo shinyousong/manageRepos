@@ -1,0 +1,61 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+	int num;
+	cin >> num;
+	int* data = new int[num];
+	for (int i = 0; i < num; i++) {
+		cin >> data[i];
+	}
+
+	// dp배열
+	int* dp = new int[num];
+	dp[0] = data[0];
+	
+	// 연속여부 배열
+	int* cnt = new int[num];
+	cnt[0] = 1;
+	// dp
+	for (int i = 1; i < num; i++) {
+		// 포도주가 0인 경우 -> 안마심
+		if (data[i] == 0) {
+			dp[i] = dp[i - 1];
+			cnt[i] = 0;
+		}
+		// 제약이 없는 경우 -> 무조건 마심
+		if (cnt[i-1] != 2){
+			dp[i] = dp[i - 1] + data[i];
+			cnt[i] = cnt[i - 1] + 1;
+		}
+		// 제약이 있는 경우
+		else {
+			// 최대가 되는 가짓수
+			// 1. 받아들이지 않음
+			// 2. 받아들이면서 i-2값 버림
+			// 3. 받아들이면서 i-1값 버림
+			// dp[i-2] + i과 dp[i-3] + i, i-1
+			int cs1 = dp[i - 1];
+			int cs2 = data[i] + data[i - 1];
+			if (i - 3 >= 0) {
+				cs2 += dp[i - 3];
+			}
+			int cs3 = dp[i - 2] + data[i];
+			int temp = max(cs1, cs2);
+			temp = max(temp, cs3);
+			if (temp == cs1) {
+				dp[i] = cs1;
+				cnt[i] = 0;
+			}
+			else if(temp == cs3) {
+				dp[i] = cs3;
+				cnt[i] = 1;
+			}
+			else {
+				dp[i] = cs2;
+				cnt[i] = 2;
+			}
+		}
+	}
+	cout << dp[num - 1] << endl;
+}
