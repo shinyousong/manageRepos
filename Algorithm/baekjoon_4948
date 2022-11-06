@@ -1,0 +1,33 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+// 0~246912
+int table[246913] = {0, };
+
+int prime(int num) {
+	for (int i = 2; i <= sqrt(num); i++) {
+		if (num % i == 0) return 0;
+	}
+	return 1;
+}
+
+int main() {
+	for (int i = 2; i <= sqrt(246912); i++) {
+		int k = 2*i;
+		while (k < 246913) {
+			table[k] = 1;
+			k += i;
+		}
+	}
+	int num;
+	do {
+		cin >> num;
+		if (num == 0) break;
+		int cnt = num;
+		for (int i = num + 1; i <= 2 * num; i++) {
+			cnt -= table[i];
+		}
+		cout << cnt << endl;
+	} while (1);
+}
