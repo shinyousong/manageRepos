@@ -1,0 +1,42 @@
+#include <iostream>
+using namespace std;
+
+void prt(char** &arr, int num, int startx, int starty, int endx, int endy) {
+	if (num == 1) {
+		arr[startx][starty] = '*';
+		return;
+	}
+	// 시작부터 끝에 해당하는 곳의 면적을 채울 것
+	// 위 3개
+	prt(arr, num / 3, startx, starty, endx/3, endy/3);
+	prt(arr, num / 3, startx+num/3, starty, endx/3*2, endy/3);
+	prt(arr, num / 3, startx+num/3*2, starty, endx, endy/3);
+	
+	// 중간
+	prt(arr, num / 3, startx, starty+num/3, endx/3, endy/3*2);
+	prt(arr, num / 3, startx+num/3*2, starty+num/3, endx, endy/3*2);
+
+	// 밑 3개
+	prt(arr, num / 3, startx, starty+num/3*2, endx/3, endy);
+	prt(arr, num / 3, startx+num/3, starty + num / 3 * 2, endx/3*2, endy);
+	prt(arr, num / 3, startx+num/3*2, starty + num / 3 * 2, endx, endy);
+}
+
+int main() {
+	int num;
+	cin >> num;
+	char** data = new char* [num];
+	for (int i = 0; i < num; i++) {
+		data[i] = new char[num];
+		for (int j = 0; j < num; j++) {
+			data[i][j] = ' ';
+		}
+	}
+	prt(data, num, 0, 0, num, num);
+	for (int i = 0; i < num; i++) {
+		for (int j = 0; j < num; j++) {
+			cout << data[i][j];
+		}
+		cout << endl;
+	}
+}
