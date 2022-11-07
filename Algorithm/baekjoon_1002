@@ -1,0 +1,33 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main() {
+	int num;
+	cin >> num;
+	int x1, y1, x2, y2;
+	int r1, r2;
+	for (int i = 0; i < num; i++) {
+		cin >> x1 >> y1 >> r1 >> x2 >> y2 >> r2;
+		// 중심이 같은 경우
+		if (x1 == x2 && y1 == y2) {
+			if (r1 == r2) cout << -1 << endl;
+			else cout << 0 << endl;
+			continue;
+		}
+		// 중심이 다른 경우
+		int dist = pow(x1 - x2, 2) + pow(y1 - y2, 2);
+		// 거리 = 반지름 합 -> 접점
+		if (dist == pow(r1 + r2, 2)) cout << 1 << endl;
+		// 거리 > 반지름 합 -> 만나지 않음
+		else if (dist > pow(r1 + r2, 2)) cout << 0 << endl;
+		// 거리 < 반지름 합 -> 모름
+		// 내포관계, 그외 분류 필요
+		else {
+			// 내포관계라면 거리+작은거 <= 큰거
+			if (dist < pow(r1 - r2, 2)) cout << 0 << endl;
+			else if (dist == pow(r1 - r2, 2)) cout << 1 << endl;
+			else cout << 2 << endl;
+		}
+	}
+}
