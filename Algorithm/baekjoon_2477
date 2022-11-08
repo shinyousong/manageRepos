@@ -1,0 +1,48 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+	int num;
+	cin >> num;
+	int data[6][2];
+	for (int i = 0; i < 6; i++) {
+		for (int j = 0; j < 2; j++) {
+			cin >> data[i][j];
+		}
+	}
+	// 참외밭은 ㄱ이거나 그걸 회전시킨 모양이므로
+	// 큰 직사각형에서 작은 직사각형을 뺴면 면적이 나온다
+	// 입력을 통해 모양 판별
+	int nor = 0, sou = 0, eas = 0, wes = 0;
+	for (int i = 0; i < 6; i++) {
+		if (data[i][0] == 1) {
+			eas++;
+		}
+		if (data[i][0] == 2) {
+			wes++;
+		}
+		if (data[i][0] == 3) {
+			sou++;
+		}
+		if (data[i][0] == 4) {
+			nor++;
+		}
+	}
+	int table[4] = {eas, wes, sou, nor};
+	// 1개, 1개 방향대로 진행 후(전체 면적)
+	// 다음 나오는 두 변을 통해 직사각형의 넓이를 구할 수 있다.
+	int start = 0;
+	for (int i = 0; i < 6; i++) {
+		if (table[data[i][0]-1] == 1) {
+			start = i;
+			break;
+		}
+	}
+	if (start == 0 && table[data[5][0]-1] == 1) start = 5;
+	int a = data[start][1];
+	int b = data[(start + 1) % 6][1];
+	int c = a - data[(start + 2) % 6][1];
+	int d = data[(start + 3) % 6][1];
+	if (a == c || b == d) cout << 0 << endl;
+	else cout << (num * (a * b - c * d)) << endl;
+}
