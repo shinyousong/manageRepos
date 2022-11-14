@@ -1,0 +1,46 @@
+#include <iostream>
+using namespace std;
+
+long long dptable[500][500];
+int main() {
+	int numMat;
+	cin >> numMat;
+	int* data = new int[numMat + 1];
+	int trash;
+	for (int j = 0; j < numMat; j++) {
+		cin >> data[j];
+		if (j != numMat-1) cin >> trash;
+	}
+	cin >> data[numMat];
+	// dptable 초기화
+	for (int i = 0; i < numMat; i++) {
+		for (int j = 0; j < numMat; j++) {
+			dptable[i][j] = 0;
+		}
+	}
+	// 바텀업으로 처음부터 끝까지 다 채울 것
+	// 이 과정에서 경로를 저장해야 함
+	for (int i = 0; i < numMat; i++) {
+		for (int j = i; j >= 0; j--) {
+			if (i == j) {
+				dptable[i][j] = 0;
+				continue;
+			}
+			// else
+			long long* store = new long long[i - j];
+			for (int k = 0; k < i - j; k++) {
+				store[k] = dptable[i - 1 - k][j] + dptable[i][i - k] + data[j] * data[i - k] * data[i + 1];
+			}
+			long long min = 100000000000;
+			// 최솟값 뽑기, 경로 확인
+			for (int k = 0; k < i - j; k++) {
+				if (min > store[k]) {
+					min = store[k];
+				}
+			}
+			dptable[i][j] = min;
+		}
+	}
+	// 경로와 답 출력
+	cout << dptable[numMat - 1][0] << endl;
+}
