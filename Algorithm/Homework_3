@@ -1,0 +1,56 @@
+#include <iostream>
+using namespace std;
+
+int fixHeap(int*& data, int numData, int root) {
+	int idx = root;
+	int cnt = 0;
+	// leaf인지 확인
+	while (idx * 2 <= numData) {
+		int maxchlidIdx = idx * 2;
+		// 자식이 두개인지 확인
+		if (idx * 2 + 1 <= numData) {
+			// 비교연산
+			cnt++;
+			if (data[maxchlidIdx] < data[maxchlidIdx + 1]) maxchlidIdx++;
+		}
+		cnt++;
+		if (data[idx] < data[maxchlidIdx]) {
+			int tempdata = data[idx];
+			data[idx] = data[maxchlidIdx];
+			data[maxchlidIdx] = tempdata;
+			idx = maxchlidIdx;
+		}
+		else break;
+	}
+	return cnt;
+}
+
+int heapsort(int*& data, int numData) {
+	int cnt = 0;
+	// make heap
+	for (int i = 0; i < numData / 2; i++) {
+		cnt += fixHeap(data, numData, numData / 2 - i);
+	}
+	// del heap
+	for (int i = numData; i > 0; i--) {
+		data[1] = data[i];
+		cnt += fixHeap(data, i-1, 1);
+	}
+	return cnt;
+}
+
+
+int main() {
+	// 힙은 BT이므로 1_inedxed 배열로 구현할 수 있음이 잘 알려져 있음
+	int num;
+	cin >> num;
+	for (int cs = 0; cs < num; cs++) {
+		int numData;
+		cin >> numData;
+		int* data = new int[numData+1];
+		for (int i = 1; i <= numData; i++) {
+			cin >> data[i];
+		}
+		cout << heapsort(data, numData) << endl;
+	}
+}
