@@ -1,0 +1,60 @@
+#include <iostream>
+using namespace std;
+
+int fail[1001];
+void makeFail(char pattern[], int patlen) {
+	for (int i = 0; i < patlen; i++) {
+		int st = 1;
+		while (st < i + 1) {
+			int t = st;
+			int flag = 1;
+			while (t < i + 1) {
+				if (pattern[t - st] != pattern[t]) {
+					flag = 0;
+					break;
+				}
+				t++;
+			}
+			if (flag) break;
+			st++;
+		}
+		fail[i] = i + 1 - st;
+	}
+}
+
+int kmp(char pattern[], char instr[], int patlen, int instrlen) {
+	int cnt = 0;
+	int j = 0;
+	for (int i = 0; i < instrlen; i++) {
+		while (j > 0 && instr[i] != pattern[j]) {
+			j = fail[j - 1];
+		}
+		if (instr[i] == pattern[j]) {
+			if (j == patlen - 1) {
+				cnt++;
+				j = fail[j];
+			}
+			else j++;
+		}
+	}
+	return cnt;
+}
+
+int main() {
+	int num;
+	cin >> num;
+	for (int cs = 0; cs < num; cs++) {
+		char pattern[1001] = { NULL, };
+		char instr[1001] = { NULL, };
+		cin >> pattern >> instr;
+		int patlen = 0;
+		while (pattern[patlen] != NULL && pattern[patlen] != '\n') patlen++;
+		int instrlen = 0;
+		while (instr[instrlen] != NULL && instr[instrlen] != '\n') instrlen++;
+
+		makeFail(pattern, patlen);
+		for (int i = 0; i < patlen; i++) cout << fail[i] << " ";
+		cout << endl;
+		cout << kmp(pattern, instr, patlen, instrlen) << endl;
+	}
+}
