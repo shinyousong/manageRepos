@@ -1,0 +1,50 @@
+#include <iostream>
+using namespace std;
+
+int DFA[3][1001];
+void constructDFA(char pattern[], int patlen) {
+	DFA[0][0] = 0;
+	DFA[1][0] = 0;
+	DFA[2][0] = 0;
+	DFA[pattern[0] - 'A'][0] = 1;
+	for (int X = 0, j = 1; j < patlen + 1; j++) {
+		for (int c = 0; c < 3; c++) {
+			DFA[c][j] = DFA[c][X];
+		}
+		if (j == patlen) break;
+		DFA[pattern[j] - 'A'][j] = j + 1;;
+		X = DFA[pattern[j] - 'A'][X];
+	}
+}
+
+void check(char instr[], int instrlen, int patlen) {
+	int suc = 0;
+	int step = 0;
+	for (int i = 0; i < instrlen; i++) {
+		step = DFA[instr[i] - 'A'][step];
+		if (step == patlen)	suc++;
+	}
+	int transit = 0;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < patlen+1; j++) {
+			if (DFA[i][j]) transit++;
+		}
+	}
+	cout << transit << " " << suc << endl;
+}
+
+int main() {
+	int num;
+	cin >> num;
+	for (int cs = 0; cs < num; cs++) {
+		char pattern[1001] = { NULL, };
+		char instr[1001] = { NULL, };
+		cin >> pattern >> instr;
+		int patlen = 0;
+		while (pattern[patlen] != NULL && pattern[patlen] != '\n') patlen++;
+		constructDFA(pattern, patlen);
+		int instrlen = 0;
+		while (instr[instrlen] != NULL && instr[instrlen] != '\n') instrlen++;
+		check(instr, instrlen, patlen);
+	}
+}
